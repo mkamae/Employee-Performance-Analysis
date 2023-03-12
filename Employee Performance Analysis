@@ -1,0 +1,21 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the data into a pandas dataframe
+data = pd.read_csv('employee_performance.csv')
+
+# Calculate the average performance rating by training, experience, and job satisfaction
+avg_rating = data.groupby(['training', 'experience', 'job_satisfaction'])['performance_rating'].mean()
+
+# Plot the average performance rating by training, experience, and job satisfaction
+fig, ax = plt.subplots()
+for key, grp in avg_rating.groupby(['training']):
+    ax = grp.unstack().plot(ax=ax, kind='bar', stacked=True, title='Employee Performance Analysis by Training')
+    ax.set_xlabel('Experience')
+    ax.set_ylabel('Performance Rating')
+plt.show()
+
+# Print out the top performers
+top_performers = data.sort_values('performance_rating', ascending=False).head()
+print('Top Performers:')
+print(top_performers)
